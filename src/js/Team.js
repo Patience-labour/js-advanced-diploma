@@ -12,5 +12,38 @@
  * ```
  * */
 export default class Team {
-  // TODO: write your logic here
+  constructor(characters = []) {
+    this._characters = new Set(characters);
+  }
+
+  get characters() {
+    return Array.from(this._characters);
+  }
+
+  add(character) {
+    this._characters.add(character);
+    return this;
+  }
+
+  addAll(...characters) {
+    characters.forEach(character => this._characters.add(character));
+    return this;
+  }
+
+  remove(character) {
+    this._characters.delete(character);
+    return this;
+  }
+
+  get size() {
+    return this._characters.size;
+  }
+
+  has(character) {
+    return this._characters.has(character);
+  }
+
+  [Symbol.iterator]() {
+    return this._characters.values();
+  }
 }
