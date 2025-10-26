@@ -186,6 +186,11 @@ export default class GamePlay {
   }
 
   selectCell(index, color = 'yellow') {
+    if (this.cells && this.cells[index]) {
+      this.cells[index].classList.remove('selected', 'selected-yellow', 'selected-green', 'selected-red');
+    } else {
+      console.warn(`Cannot deselect cell at index ${index}: cell does not exist`);
+    }
     this.deselectCell(index);
     this.cells[index].classList.add('selected', `selected-${color}`);
   }
@@ -203,7 +208,7 @@ export default class GamePlay {
   hideCellTooltip(index) {
     this.cells[index].title = '';
   }
-  
+
   showDamage(index, damage) {
     return new Promise((resolve) => {
       const cell = this.cells[index];
@@ -228,4 +233,76 @@ export default class GamePlay {
       throw new Error('GamePlay not bind to DOM');
     }
   }
+
+  redrawStats(stats) {
+    let statsElement = document.querySelector('.game-stats');
+    if (!statsElement) {
+      statsElement = document.createElement('div');
+      statsElement.className = 'game-stats';
+      this.container.appendChild(statsElement);
+    }
+
+    statsElement.innerHTML = `
+      <div>Уровень: ${stats.level}</div>
+      <div>Очки: ${stats.score}</div>
+      <div>Жизни: ${stats.health}</div>
+      <!-- добавьте другие параметры статистики -->
+    `;
+  }
+
+  showError(message) {
+    let errorElement = document.querySelector('.game-error');
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'game-error';
+      errorElement.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #ff4444;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        z-index: 1000;
+      `;
+      document.body.appendChild(errorElement);
+    }
+
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+
+    setTimeout(() => {
+      errorElement.style.display = 'none';
+    }, 3000);
+  }
+
+  showMessage(message) {
+    let messageElement = document.querySelector('.game-message');
+    if (!messageElement) {
+      messageElement = document.createElement('div');
+      messageElement.className = 'game-message';
+      messageElement.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        font-size: 18px;
+        z-index: 1000;
+        text-align: center;
+      `;
+      document.body.appendChild(messageElement);
+    }
+
+    messageElement.textContent = message;
+    messageElement.style.display = 'block';
+
+    setTimeout(() => {
+      messageElement.style.display = 'none';
+    }, 2000);
+  }
+
 }

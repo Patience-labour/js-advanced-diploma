@@ -4,6 +4,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
+  devtool: "inline-source-map",
   mode: 'development',
   
   output: {
@@ -49,10 +50,9 @@ module.exports = {
       template: './src/index.html'
     }),
     
-    // ESLintPlugin для ESLint 9
     new ESLintPlugin({
-      extensions: ['js'], // Проверяем только .js файлы
-      exclude: 'node_modules' // Исключаем node_modules
+      extensions: ['js'],
+      exclude: 'node_modules'
     })
   ],
   
